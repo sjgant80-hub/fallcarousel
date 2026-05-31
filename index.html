@@ -1,0 +1,1145 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0a0f">
+<title>◊ fallcarousel · sovereign LinkedIn carousel builder · prime 367</title>
+<meta name="description" content="Sovereign single-file LinkedIn carousel builder. 1.39x reach format. Outline · live preview · PDF + PNG export. Works offline.">
+<link rel="manifest" href='data:application/manifest+json,{"name":"fallcarousel","short_name":"fallcarousel","start_url":".","display":"standalone","background_color":"#0b0a0f","theme_color":"#d4a853","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 fill=%22%230b0a0f%22/><text x=%2232%22 y=%2244%22 text-anchor=%22middle%22 font-size=%2236%22 fill=%22%23d4a853%22 font-family=%22serif%22 font-weight=%22bold%22>◊</text></svg>","sizes":"any","type":"image/svg+xml"}]}'>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ox: #8b1a1a;
+  --brass: #b8974a;
+  --gold: #d4a853;
+  --cream: #c4bfb2;
+  --void: #0b0a0f;
+  --surface: #14131a;
+  --surface-2: #1a1820;
+  --border: #2a2730;
+  --muted: #6f6b78;
+  --green: #4a8a4a;
+  --red: #c8371a;
+  --amber: #c87e3a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { background: var(--void); color: var(--cream); font-family: 'DM Sans', system-ui, sans-serif; min-height: 100dvh; -webkit-font-smoothing: antialiased; }
+body { background-image: radial-gradient(at 15% 0%, rgba(139,26,26,0.08) 0%, transparent 40%), radial-gradient(at 85% 100%, rgba(184,151,74,0.06) 0%, transparent 35%); }
+::selection { background: var(--gold); color: var(--void); }
+
+header { padding: 22px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+header h1 { font-family: 'Libre Baskerville', Georgia, serif; font-size: 22px; letter-spacing: 0.01em; }
+header h1 em { color: var(--gold); font-style: normal; }
+header .meta { font-family: 'DM Mono'; font-size: 11px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+header .lic { font-family: 'DM Mono'; font-size: 10px; padding: 4px 10px; border: 1px solid var(--border); color: var(--brass); letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+header .lic.paid { color: var(--gold); border-color: var(--gold); }
+
+main { display: grid; grid-template-columns: 380px 1fr 380px; gap: 0; min-height: calc(100dvh - 70px); }
+@media (max-width: 1200px) { main { grid-template-columns: 1fr; } }
+
+.col { border-right: 1px solid var(--border); padding: 22px 22px 80px; overflow-y: auto; }
+.col:last-child { border-right: none; }
+@media (max-width: 1200px) { .col { border-right: none; border-bottom: 1px solid var(--border); } }
+
+.col h2 { font-family: 'Libre Baskerville', serif; font-size: 16px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); color: var(--cream); }
+.col h2 .sub { font-family: 'DM Mono'; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; float: right; margin-top: 4px; }
+
+.field { margin-bottom: 12px; }
+.field label { font-family: 'DM Mono'; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 5px; }
+.field input, .field textarea, .field select {
+  width: 100%; background: var(--void); border: 1px solid var(--border); color: var(--cream);
+  padding: 9px 11px; font-family: 'DM Sans'; font-size: 13px; line-height: 1.4;
+}
+.field input:focus, .field textarea:focus, .field select:focus { outline: 1px solid var(--gold); outline-offset: -1px; }
+.field textarea { resize: vertical; min-height: 60px; font-family: 'DM Sans'; }
+
+.btn {
+  background: var(--ox); color: var(--cream); border: none; padding: 10px 18px;
+  font-family: 'Syne'; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  font-size: 11px; cursor: pointer; transition: all 0.15s;
+}
+.btn:hover { background: var(--gold); color: var(--void); }
+.btn.ghost { background: transparent; border: 1px solid var(--border); color: var(--cream); }
+.btn.ghost:hover { border-color: var(--gold); color: var(--gold); background: transparent; }
+.btn.gold { background: var(--gold); color: var(--void); }
+.btn.gold:hover { background: var(--brass); }
+.btn.sm { padding: 6px 10px; font-size: 10px; }
+.btn-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+
+.slide-list { margin-top: 10px; }
+.slide-row {
+  background: var(--surface); border: 1px solid var(--border); padding: 10px 12px;
+  margin-bottom: 6px; cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; gap: 10px;
+}
+.slide-row:hover { border-color: var(--brass); }
+.slide-row.active { border-color: var(--gold); background: var(--surface-2); }
+.slide-row .idx { font-family: 'DM Mono'; font-size: 11px; color: var(--gold); width: 22px; flex-shrink: 0; }
+.slide-row .ttl { font-family: 'DM Sans'; font-weight: 500; font-size: 12px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--cream); }
+.slide-row .act { display: flex; gap: 3px; }
+.slide-row .act button { background: transparent; border: none; color: var(--muted); cursor: pointer; padding: 3px 5px; font-family: 'DM Mono'; font-size: 11px; }
+.slide-row .act button:hover { color: var(--gold); }
+
+.bullets { margin-bottom: 10px; }
+.bullet-row { display: flex; gap: 6px; margin-bottom: 5px; }
+.bullet-row input { flex: 1; }
+.bullet-row button { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 0 10px; font-family: 'DM Mono'; font-size: 13px; cursor: pointer; }
+.bullet-row button:hover { color: var(--red); border-color: var(--red); }
+
+.hook-presets { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 12px; }
+.hook-presets button { background: transparent; border: 1px solid var(--border); color: var(--cream); padding: 7px 8px; font-family: 'DM Mono'; font-size: 10px; cursor: pointer; text-align: left; letter-spacing: 0.04em; }
+.hook-presets button:hover { border-color: var(--gold); color: var(--gold); }
+
+.theme-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
+.theme-swatch { aspect-ratio: 1; border: 2px solid var(--border); cursor: pointer; transition: all 0.15s; display: grid; place-items: center; font-family: 'Libre Baskerville', serif; font-size: 16px; font-weight: bold; }
+.theme-swatch:hover { transform: scale(1.05); }
+.theme-swatch.active { border-color: var(--gold); }
+.theme-swatch.t-oxblood { background: #1a0808; color: #b8974a; }
+.theme-swatch.t-navy { background: #0a1428; color: #ff8c42; }
+.theme-swatch.t-mono { background: #0a0a0a; color: #f5d76e; }
+.theme-swatch.t-cream { background: #f0ebe2; color: #1a0808; }
+.theme-swatch.t-forest { background: #0a1810; color: #c4bfb2; }
+.theme-swatch.t-rose { background: #f5e8e8; color: #6b1d1d; }
+.theme-swatch.t-ink { background: #f7f3eb; color: #0a0a0a; }
+.theme-swatch.t-violet { background: #1a0a28; color: #d4a853; }
+
+.color-pickers { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+.color-pickers label { font-family: 'DM Mono'; font-size: 9px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 3px; }
+.color-pickers input[type=color] { width: 100%; height: 32px; border: 1px solid var(--border); background: var(--void); cursor: pointer; padding: 2px; }
+
+/* PREVIEW CENTER */
+.preview-col { background: #06050a; padding: 28px 24px; overflow-y: auto; }
+.preview-shell { max-width: 540px; margin: 0 auto; }
+.preview-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 12px; }
+.preview-nav .arrows { display: flex; gap: 6px; }
+.preview-nav .arrows button { background: var(--surface); border: 1px solid var(--border); color: var(--cream); width: 36px; height: 36px; font-family: 'DM Mono'; cursor: pointer; font-size: 14px; }
+.preview-nav .arrows button:hover { border-color: var(--gold); color: var(--gold); }
+.preview-nav .arrows button:disabled { opacity: 0.3; cursor: not-allowed; }
+.preview-nav .nav-info { font-family: 'DM Mono'; font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+.slide-frame {
+  width: 100%; aspect-ratio: 1080 / 1350; background: #1a0808; color: #c4bfb2;
+  position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  display: flex; flex-direction: column; padding: 8%; overflow: hidden;
+  transition: opacity 0.2s;
+}
+.slide-frame::before {
+  content: ''; position: absolute; inset: 0; background-image:
+    linear-gradient(45deg, transparent 49.5%, currentColor 49.5%, currentColor 50.5%, transparent 50.5%);
+  opacity: 0.015; pointer-events: none;
+}
+.slide-frame.cover .headline { font-family: 'Libre Baskerville', serif; font-size: 6vw; max-width: 540px; font-size: clamp(22px, 4.2vw, 44px); line-height: 1.1; font-weight: 700; }
+.slide-frame .corner-mark { position: absolute; top: 6%; right: 7%; font-family: 'Libre Baskerville', serif; font-size: 24px; font-weight: bold; opacity: 0.55; }
+.slide-frame .slide-num { position: absolute; bottom: 6%; right: 7%; font-family: 'DM Mono'; font-size: 11px; letter-spacing: 0.15em; opacity: 0.55; }
+.slide-frame .footer-tag { position: absolute; bottom: 6%; left: 7%; font-family: 'DM Mono'; font-size: 10px; letter-spacing: 0.15em; opacity: 0.4; text-transform: uppercase; }
+.slide-frame .headline { font-family: 'Libre Baskerville', serif; font-weight: 700; line-height: 1.15; margin-bottom: 4%; font-size: clamp(18px, 3.2vw, 32px); }
+.slide-frame.cover .headline { font-size: clamp(24px, 4.6vw, 46px); }
+.slide-frame .eyebrow { font-family: 'DM Mono'; font-size: clamp(9px, 1.2vw, 12px); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6%; opacity: 0.7; }
+.slide-frame ul.body { list-style: none; padding: 0; margin: 0; flex: 1; }
+.slide-frame ul.body li { font-family: 'DM Sans'; font-weight: 400; font-size: clamp(13px, 1.9vw, 18px); line-height: 1.45; margin-bottom: 3%; padding-left: 1.2em; position: relative; }
+.slide-frame ul.body li::before { content: '◊'; position: absolute; left: 0; opacity: 0.8; font-family: 'Libre Baskerville', serif; }
+.slide-frame .quote { font-family: 'Libre Baskerville', serif; font-style: italic; font-size: clamp(14px, 2vw, 20px); line-height: 1.4; margin-top: auto; padding: 4% 0 4%; border-top: 1px solid currentColor; opacity: 0.85; }
+.slide-frame.cta { background: var(--accent-bg, #1a0808); color: var(--accent-fg, #d4a853); }
+.slide-frame.cta .headline { font-size: clamp(22px, 4.2vw, 42px); }
+.slide-frame.cta .arrow-big { font-size: clamp(60px, 12vw, 120px); font-family: 'Libre Baskerville', serif; line-height: 1; margin-top: auto; opacity: 0.4; }
+
+.preview-strip { display: flex; gap: 6px; overflow-x: auto; padding: 14px 0; margin-top: 14px; }
+.preview-thumb { flex: 0 0 64px; aspect-ratio: 1080 / 1350; border: 1px solid var(--border); cursor: pointer; padding: 4px; overflow: hidden; position: relative; font-family: 'DM Mono'; font-size: 7px; line-height: 1.1; transition: all 0.15s; }
+.preview-thumb:hover { border-color: var(--brass); }
+.preview-thumb.active { border-color: var(--gold); }
+.preview-thumb .tn { position: absolute; top: 2px; left: 3px; opacity: 0.6; }
+.preview-thumb .ttitle { padding-top: 8px; opacity: 0.85; overflow: hidden; word-break: break-word; }
+
+/* EXPORT COL */
+.export-block { margin-bottom: 20px; }
+.export-block h3 { font-family: 'Syne'; font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brass); margin-bottom: 8px; }
+.export-block p { font-family: 'DM Mono'; font-size: 11px; color: var(--muted); line-height: 1.5; margin-bottom: 8px; }
+
+.draft-list { margin-bottom: 12px; }
+.draft-row { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border: 1px solid var(--border); margin-bottom: 4px; font-family: 'DM Mono'; font-size: 11px; }
+.draft-row .dt { flex: 1; cursor: pointer; color: var(--cream); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.draft-row .dt:hover { color: var(--gold); }
+.draft-row .dx { color: var(--muted); cursor: pointer; padding: 2px 6px; background: transparent; border: none; font-family: 'DM Mono'; font-size: 12px; }
+.draft-row .dx:hover { color: var(--red); }
+
+.post-body { background: var(--void); border: 1px solid var(--border); padding: 10px; font-family: 'DM Mono'; font-size: 11px; line-height: 1.5; color: var(--cream); white-space: pre-wrap; min-height: 80px; margin-bottom: 8px; }
+
+footer { padding: 18px 28px; border-top: 1px solid var(--border); font-family: 'DM Mono'; font-size: 10px; color: var(--muted); text-align: center; letter-spacing: 0.08em; }
+footer a { color: var(--brass); text-decoration: none; }
+footer a:hover { color: var(--gold); }
+
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--gold); color: var(--gold); padding: 12px 22px; font-family: 'DM Mono'; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+.toast.show { opacity: 1; }
+
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 500; display: none; align-items: center; justify-content: center; padding: 24px; }
+.modal-bg.show { display: flex; }
+.modal { background: var(--surface); border: 1px solid var(--gold); max-width: 460px; width: 100%; padding: 28px; }
+.modal h3 { font-family: 'Libre Baskerville', serif; font-size: 20px; margin-bottom: 14px; color: var(--gold); }
+.modal p { font-family: 'DM Sans'; font-size: 13px; line-height: 1.6; color: var(--cream); margin-bottom: 14px; }
+.modal ul { padding-left: 20px; font-family: 'DM Sans'; font-size: 13px; line-height: 1.7; color: var(--cream); margin-bottom: 18px; }
+.modal .btn-row { justify-content: flex-end; }
+
+/* ─── PRINT: each slide is a page at 1080×1350 ─── */
+@media print {
+  @page { size: 1080px 1350px; margin: 0; }
+  body * { visibility: hidden; }
+  #printArea, #printArea * { visibility: visible; }
+  #printArea { position: absolute; left: 0; top: 0; display: block !important; width: 1080px; }
+  .slide-print { width: 1080px; height: 1350px; page-break-after: always; break-after: page; position: relative; padding: 90px; display: flex; flex-direction: column; overflow: hidden; }
+  .slide-print:last-child { page-break-after: auto; }
+  .slide-print .headline { font-family: 'Libre Baskerville', serif; font-weight: 700; line-height: 1.12; font-size: 56px; margin-bottom: 36px; }
+  .slide-print.cover .headline { font-size: 78px; }
+  .slide-print .eyebrow { font-family: 'DM Mono'; font-size: 16px; letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 48px; opacity: 0.75; }
+  .slide-print ul.body { list-style: none; padding: 0; margin: 0; flex: 1; }
+  .slide-print ul.body li { font-family: 'DM Sans'; font-size: 32px; line-height: 1.45; margin-bottom: 24px; padding-left: 36px; position: relative; }
+  .slide-print ul.body li::before { content: '◊'; position: absolute; left: 0; font-family: 'Libre Baskerville', serif; opacity: 0.85; }
+  .slide-print .quote { font-family: 'Libre Baskerville', serif; font-style: italic; font-size: 30px; line-height: 1.4; margin-top: auto; padding: 36px 0 0; border-top: 1px solid currentColor; opacity: 0.85; }
+  .slide-print .corner-mark { position: absolute; top: 80px; right: 90px; font-family: 'Libre Baskerville', serif; font-size: 48px; font-weight: bold; opacity: 0.55; }
+  .slide-print .slide-num { position: absolute; bottom: 80px; right: 90px; font-family: 'DM Mono'; font-size: 18px; letter-spacing: 0.18em; opacity: 0.55; }
+  .slide-print .footer-tag { position: absolute; bottom: 80px; left: 90px; font-family: 'DM Mono'; font-size: 16px; letter-spacing: 0.18em; opacity: 0.5; text-transform: uppercase; }
+  .slide-print.cta .arrow-big { font-size: 220px; font-family: 'Libre Baskerville', serif; line-height: 1; margin-top: auto; opacity: 0.45; }
+}
+#printArea { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>◊ <em>fallcarousel</em> · LinkedIn carousel builder</h1>
+  <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+    <div class="meta">prime 367 ┃ v1.0 ┃ sovereign ┃ 1.39× reach format</div>
+    <div class="lic" id="licBadge" onclick="openLicModal()">free · 5 saved · 8 slides</div>
+  </div>
+</header>
+
+<main>
+
+<!-- ════════ COL 1 · OUTLINE EDITOR ════════ -->
+<section class="col" id="outlineCol">
+  <h2>Outline <span class="sub" id="slideCount">0 / 8</span></h2>
+
+  <div class="field">
+    <label>Carousel title</label>
+    <input id="cTitle" placeholder="e.g. 5 lessons from shipping 30 tools">
+  </div>
+
+  <div class="field">
+    <label>Hook templates</label>
+    <div class="hook-presets">
+      <button data-hook="results">RESULTS-FIRST<br><small style="color:var(--muted)">"I X and saved $Y"</small></button>
+      <button data-hook="beforeafter">BEFORE / AFTER<br><small style="color:var(--muted)">stark contrast</small></button>
+      <button data-hook="contrarian">CONTRARIAN<br><small style="color:var(--muted)">"Stop doing X"</small></button>
+      <button data-hook="number">NUMBER LIST<br><small style="color:var(--muted)">"7 lessons"</small></button>
+    </div>
+  </div>
+
+  <h2 style="margin-top:18px">Slides</h2>
+  <div class="slide-list" id="slideList"></div>
+  <div class="btn-row">
+    <button class="btn ghost sm" onclick="addSlide()">+ slide</button>
+    <button class="btn ghost sm" onclick="addCTA()">+ CTA slide</button>
+  </div>
+
+  <h2 style="margin-top:22px">Edit slide <span class="sub" id="editIdx">—</span></h2>
+  <div id="slideEditor">
+    <div class="field"><label>Eyebrow (optional)</label><input id="sEyebrow" placeholder="e.g. CHAPTER 03"></div>
+    <div class="field"><label>Headline</label><textarea id="sHeadline" rows="2" placeholder="The slide's main line"></textarea></div>
+    <div class="field">
+      <label>Bullets (1-5)</label>
+      <div class="bullets" id="sBullets"></div>
+      <button class="btn ghost sm" onclick="addBullet()">+ bullet</button>
+    </div>
+    <div class="field"><label>Accent quote (optional)</label><textarea id="sQuote" rows="2" placeholder="A pull-quote or stat"></textarea></div>
+    <div class="field"><label>Type</label>
+      <select id="sType">
+        <option value="cover">cover</option>
+        <option value="standard" selected>standard</option>
+        <option value="quote">quote-only</option>
+        <option value="cta">CTA / close</option>
+      </select>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ COL 2 · LIVE PREVIEW ════════ -->
+<section class="col preview-col">
+  <div class="preview-shell">
+    <div class="preview-nav">
+      <div class="arrows">
+        <button id="navPrev" onclick="navSlide(-1)">‹</button>
+        <button id="navNext" onclick="navSlide(1)">›</button>
+      </div>
+      <div class="nav-info" id="navInfo">— / —</div>
+      <div class="arrows">
+        <button onclick="reorder(-1)" title="move up">▲</button>
+        <button onclick="reorder(1)" title="move down">▼</button>
+      </div>
+    </div>
+    <div id="previewSlide" class="slide-frame"></div>
+    <div class="preview-strip" id="previewStrip"></div>
+    <p style="font-family:'DM Mono';font-size:10px;color:var(--muted);text-align:center;margin-top:14px;letter-spacing:0.08em;line-height:1.6">LinkedIn portrait · 1080 × 1350 · 4:5 · same ratio your reader will see</p>
+  </div>
+</section>
+
+<!-- ════════ COL 3 · THEME + EXPORT ════════ -->
+<section class="col">
+  <h2>Theme</h2>
+  <div class="theme-row" id="themeRow">
+    <div class="theme-swatch t-oxblood" data-theme="oxblood" title="oxblood / brass">A</div>
+    <div class="theme-swatch t-navy" data-theme="navy" title="navy / orange">A</div>
+    <div class="theme-swatch t-mono" data-theme="mono" title="mono / yellow">A</div>
+    <div class="theme-swatch t-cream" data-theme="cream" title="cream / oxblood">A</div>
+    <div class="theme-swatch t-forest" data-theme="forest" title="forest / cream">A</div>
+    <div class="theme-swatch t-rose" data-theme="rose" title="rose / wine">A</div>
+    <div class="theme-swatch t-ink" data-theme="ink" title="ivory / ink">A</div>
+    <div class="theme-swatch t-violet" data-theme="violet" title="violet / gold">A</div>
+  </div>
+  <div class="color-pickers">
+    <div><label>BG</label><input type="color" id="cBg" value="#1a0808"></div>
+    <div><label>FG</label><input type="color" id="cFg" value="#c4bfb2"></div>
+    <div><label>Accent</label><input type="color" id="cAc" value="#b8974a"></div>
+  </div>
+
+  <div class="export-block">
+    <h3>Export</h3>
+    <p>PDF uses print-to-PDF at the 1080×1350 LinkedIn document size. Browser dialog opens → save as PDF.</p>
+    <div class="btn-row">
+      <button class="btn gold" onclick="exportPDF()">PDF (print)</button>
+      <button class="btn ghost" onclick="exportPNG()">PNG sequence</button>
+      <button class="btn ghost" onclick="exportHTML()">HTML deck</button>
+      <button class="btn ghost" onclick="exportJSON()">JSON</button>
+    </div>
+  </div>
+
+  <div class="export-block">
+    <h3>Post body · copy &amp; paste</h3>
+    <div class="post-body" id="postBody">—</div>
+    <div class="btn-row">
+      <button class="btn ghost sm" onclick="copyPost()">copy body</button>
+      <button class="btn ghost sm" onclick="copyComment()">copy first comment</button>
+    </div>
+  </div>
+
+  <div class="export-block">
+    <h3>Drafts</h3>
+    <div class="draft-list" id="draftList"></div>
+    <div class="btn-row">
+      <button class="btn" onclick="saveDraft()">save draft</button>
+      <button class="btn ghost sm" onclick="newDeck()">new deck</button>
+      <button class="btn ghost sm" onclick="loadJSON()">load JSON</button>
+    </div>
+    <input type="file" id="fileIn" accept=".json" style="display:none">
+  </div>
+
+  <div class="export-block">
+    <h3>Reach math</h3>
+    <p style="line-height:1.65"><span style="color:var(--gold)">1.39×</span> carousel reach multiplier<br>
+    <span style="color:var(--gold)">1.30×</span> engagement multiplier<br>
+    <span style="color:var(--gold)">1.61×</span> Creation-topic reach<br>
+    <span style="color:var(--muted)">Source: AuthoredUp 3M+ post study · Feb 2026</span></p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  ◊ fallcarousel · prime 367 · MIT · Simon Gant · part of the <a href="https://www.ai-nativesolutions.com">AIN</a> estate · <a href="https://github.com/sjgant80-hub/fallcarousel">source</a>
+</footer>
+
+<div class="toast" id="toast">—</div>
+
+<div class="modal-bg" id="licModal">
+  <div class="modal">
+    <h3>fallcarousel · licence</h3>
+    <p><strong style="color:var(--brass)">Free tier (default):</strong></p>
+    <ul>
+      <li>5 saved drafts</li>
+      <li>8 slides max per carousel</li>
+      <li>"made with fallcarousel" footer baked into exports</li>
+    </ul>
+    <p><strong style="color:var(--gold)">Paid (Konomi-activated):</strong></p>
+    <ul>
+      <li>unlimited drafts</li>
+      <li>15 slides max</li>
+      <li>no footer</li>
+      <li>brand-kit save / scheduled queue (coming)</li>
+    </ul>
+    <p style="font-family:'DM Mono';font-size:11px;color:var(--muted)">Paste a Konomi key to activate. Or run sovereign-free forever — that's fine too.</p>
+    <div class="field"><label>Konomi key</label><input id="licKey" placeholder="KNM-..." style="font-family:'DM Mono'"></div>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="closeLicModal()">close</button>
+      <button class="btn gold" onclick="activateLic()">activate</button>
+    </div>
+  </div>
+</div>
+
+<!-- print-only DOM injected on demand -->
+<div id="printArea"></div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════
+// KONOMI · ~50-line licence shim · dead-file until activated
+// ═══════════════════════════════════════════════════════
+const Konomi = (() => {
+  const STORE = 'fallcarousel.lic';
+  const PFX = 'KNM-FC-';
+  let active = false;
+  function check(key) {
+    if (!key || !key.startsWith(PFX)) return false;
+    const body = key.slice(PFX.length);
+    if (body.length < 8) return false;
+    // simple parity check: chars sum % 367 === 0 (prime 367)
+    let s = 0; for (const c of body) s += c.charCodeAt(0);
+    return s % 367 === 0;
+  }
+  function load() {
+    try { const k = localStorage.getItem(STORE); if (k && check(k)) active = true; } catch(e){}
+  }
+  function activate(key) {
+    if (!check(key)) return false;
+    try { localStorage.setItem(STORE, key); } catch(e){}
+    active = true; return true;
+  }
+  function tier() { return active ? 'paid' : 'free'; }
+  function caps() { return active ? { maxSlides: 15, maxDrafts: 999, footer: false } : { maxSlides: 8, maxDrafts: 5, footer: true }; }
+  load();
+  return { activate, tier, caps, isPaid: () => active };
+})();
+
+// ═══════════════════════════════════════════════════════
+// FALLMESH HOOK · prime 367 · BroadcastChannel
+// ═══════════════════════════════════════════════════════
+const Mesh = (() => {
+  let bc = null;
+  try { bc = new BroadcastChannel('fall-signal'); } catch(e){}
+  function emit(kind, payload) {
+    if (!bc) return;
+    try { bc.postMessage({ kind, prime: 367, source: 'fallcarousel', t: Date.now(), payload }); } catch(e){}
+  }
+  return { emit };
+})();
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let deck = null;
+let activeIdx = 0;
+let drafts = [];
+
+function blankSlide(type = 'standard') {
+  return {
+    type, eyebrow: '', headline: '', bullets: [], quote: ''
+  };
+}
+
+function defaultDeck() {
+  return {
+    id: 'd_' + Date.now().toString(36),
+    title: '5 sovereign-software lessons from shipping 30+ tools',
+    theme: 'oxblood',
+    colors: { bg: '#1a0808', fg: '#c4bfb2', ac: '#b8974a' },
+    author: '',
+    cta: 'Follow for more on sovereign software.',
+    comment: 'Want the toolkit I used? Comment "send" and I\'ll DM the list.',
+    created: Date.now(),
+    slides: [
+      { type: 'cover', eyebrow: '5 LESSONS', headline: 'What 30 sovereign tools taught me about shipping', bullets: [], quote: 'one file. zero servers. real users.' },
+      { type: 'standard', eyebrow: 'LESSON 01', headline: 'Single-file or it didn\'t ship.', bullets: ['Multi-repo = abandoned in 3 months','One HTML file = re-openable in 3 years','The constraint forces clarity'], quote: '' },
+      { type: 'standard', eyebrow: 'LESSON 02', headline: 'Your tool is the marketing.', bullets: ['Demos beat decks','Working > pitching','The carousel you\'re reading was built with this tool'], quote: '' },
+      { type: 'standard', eyebrow: 'LESSON 03', headline: 'Ship in 90 minutes or don\'t.', bullets: ['Scope to one sitting','Polish in the next sitting','Backlog kills momentum'], quote: '' },
+      { type: 'standard', eyebrow: 'LESSON 04', headline: 'IndexedDB > backend.', bullets: ['User\'s data on user\'s device','Zero ops cost','Works offline by default','File:// is a feature not a bug'], quote: '' },
+      { type: 'quote', eyebrow: 'LESSON 05', headline: 'Sovereignty compounds.', bullets: [], quote: 'Each tool is a node. Each user owns their copy. The network is the artefact.' },
+      { type: 'cta', eyebrow: 'WANT THE STACK?', headline: 'Build sovereign tools without a backend.', bullets: ['Drop a comment with "stack"','I\'ll DM the toolkit I use','Free · no funnel'], quote: '' },
+    ]
+  };
+}
+
+// ═══════════════════════════════════════════════════════
+// THEMES (8 presets, customisable RGB triples)
+// ═══════════════════════════════════════════════════════
+const THEMES = {
+  oxblood: { bg: '#1a0808', fg: '#c4bfb2', ac: '#b8974a' },
+  navy:    { bg: '#0a1428', fg: '#e6e8eb', ac: '#ff8c42' },
+  mono:    { bg: '#0a0a0a', fg: '#e8e6e3', ac: '#f5d76e' },
+  cream:   { bg: '#f0ebe2', fg: '#1a0808', ac: '#8b1a1a' },
+  forest:  { bg: '#0a1810', fg: '#c4bfb2', ac: '#d4a853' },
+  rose:    { bg: '#f5e8e8', fg: '#3a0e0e', ac: '#6b1d1d' },
+  ink:     { bg: '#f7f3eb', fg: '#0a0a0a', ac: '#8b1a1a' },
+  violet:  { bg: '#1a0a28', fg: '#c4bfb2', ac: '#d4a853' },
+};
+
+function applyTheme(name) {
+  if (!THEMES[name]) return;
+  deck.theme = name;
+  deck.colors = { ...THEMES[name] };
+  document.getElementById('cBg').value = deck.colors.bg;
+  document.getElementById('cFg').value = deck.colors.fg;
+  document.getElementById('cAc').value = deck.colors.ac;
+  document.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s.dataset.theme === name));
+  renderPreview();
+}
+
+// ═══════════════════════════════════════════════════════
+// HOOK PRESETS
+// ═══════════════════════════════════════════════════════
+const HOOKS = {
+  results: {
+    title: 'I [did action] and saved $X in Y days',
+    cover: { eyebrow: 'CASE STUDY', headline: 'I cut my SaaS bill by $4,800/yr in one weekend', bullets: [], quote: 'Here\'s exactly what I did.' },
+  },
+  beforeafter: {
+    title: 'Before vs After: [the transformation]',
+    cover: { eyebrow: 'BEFORE / AFTER', headline: 'Before: 14 tools · $620/mo. After: 1 file · $0.', bullets: [], quote: 'Same outcomes. Different stack.' },
+  },
+  contrarian: {
+    title: 'Stop [common behavior] — do this instead',
+    cover: { eyebrow: 'CONTRARIAN', headline: 'Stop building "MVPs". Ship sovereign tools instead.', bullets: [], quote: 'MVP = excuse for tech debt.' },
+  },
+  number: {
+    title: '7 lessons from [experience]',
+    cover: { eyebrow: '7 LESSONS', headline: '7 things I learned shipping 30 tools in 90 days', bullets: [], quote: 'A swipe-through field report.' },
+  },
+};
+
+function applyHook(name) {
+  const h = HOOKS[name]; if (!h) return;
+  document.getElementById('cTitle').value = h.title;
+  deck.title = h.title;
+  if (deck.slides[0] && deck.slides[0].type === 'cover') {
+    Object.assign(deck.slides[0], h.cover);
+  } else {
+    deck.slides.unshift({ type: 'cover', ...h.cover });
+  }
+  activeIdx = 0;
+  renderAll();
+  toast('hook applied');
+}
+
+// ═══════════════════════════════════════════════════════
+// INDEXED-DB · drafts persistence (with localStorage fallback)
+// ═══════════════════════════════════════════════════════
+const DB = (() => {
+  const NAME = 'fallcarousel', STORE = 'drafts', LSKEY = 'fallcarousel.drafts.fallback';
+  let _db = null, _ready = null, _useLS = false;
+  function open() {
+    if (_ready) return _ready;
+    _ready = new Promise((res) => {
+      try {
+        const req = indexedDB.open(NAME, 1);
+        req.onupgradeneeded = e => { e.target.result.createObjectStore(STORE, { keyPath: 'id' }); };
+        req.onsuccess = e => { _db = e.target.result; res(_db); };
+        req.onerror = () => { _useLS = true; res(null); };
+      } catch(e) { _useLS = true; res(null); }
+    });
+    return _ready;
+  }
+  async function put(d) {
+    await open();
+    if (_useLS || !_db) {
+      const arr = JSON.parse(localStorage.getItem(LSKEY) || '[]').filter(x => x.id !== d.id);
+      arr.push(d); localStorage.setItem(LSKEY, JSON.stringify(arr)); return;
+    }
+    return new Promise((res, rej) => {
+      const tx = _db.transaction(STORE, 'readwrite'); tx.objectStore(STORE).put(d);
+      tx.oncomplete = res; tx.onerror = rej;
+    });
+  }
+  async function all() {
+    await open();
+    if (_useLS || !_db) return JSON.parse(localStorage.getItem(LSKEY) || '[]');
+    return new Promise((res, rej) => {
+      const tx = _db.transaction(STORE, 'readonly'); const req = tx.objectStore(STORE).getAll();
+      req.onsuccess = () => res(req.result || []); req.onerror = rej;
+    });
+  }
+  async function del(id) {
+    await open();
+    if (_useLS || !_db) {
+      const arr = JSON.parse(localStorage.getItem(LSKEY) || '[]').filter(x => x.id !== id);
+      localStorage.setItem(LSKEY, JSON.stringify(arr)); return;
+    }
+    return new Promise((res, rej) => {
+      const tx = _db.transaction(STORE, 'readwrite'); tx.objectStore(STORE).delete(id);
+      tx.oncomplete = res; tx.onerror = rej;
+    });
+  }
+  return { put, all, del };
+})();
+
+// ═══════════════════════════════════════════════════════
+// RENDER · slide list
+// ═══════════════════════════════════════════════════════
+function renderSlideList() {
+  const wrap = document.getElementById('slideList');
+  wrap.innerHTML = '';
+  deck.slides.forEach((s, i) => {
+    const row = document.createElement('div');
+    row.className = 'slide-row' + (i === activeIdx ? ' active' : '');
+    const t = s.headline || '(no headline)';
+    row.innerHTML = `
+      <span class="idx">${String(i+1).padStart(2,'0')}</span>
+      <span class="ttl">[${s.type}] ${escapeHtml(t)}</span>
+      <span class="act">
+        <button title="duplicate" data-act="dup">⎘</button>
+        <button title="delete" data-act="del">×</button>
+      </span>`;
+    row.addEventListener('click', (ev) => {
+      if (ev.target.closest('button')) return;
+      activeIdx = i; renderAll();
+    });
+    row.querySelector('[data-act="dup"]').addEventListener('click', () => duplicateSlide(i));
+    row.querySelector('[data-act="del"]').addEventListener('click', () => deleteSlide(i));
+    wrap.appendChild(row);
+  });
+  document.getElementById('slideCount').textContent = `${deck.slides.length} / ${Konomi.caps().maxSlides}`;
+}
+
+function renderEditor() {
+  const s = deck.slides[activeIdx];
+  if (!s) { document.getElementById('editIdx').textContent = '—'; return; }
+  document.getElementById('editIdx').textContent = String(activeIdx + 1).padStart(2,'0');
+  document.getElementById('sEyebrow').value = s.eyebrow || '';
+  document.getElementById('sHeadline').value = s.headline || '';
+  document.getElementById('sQuote').value = s.quote || '';
+  document.getElementById('sType').value = s.type || 'standard';
+  renderBullets();
+}
+
+function renderBullets() {
+  const s = deck.slides[activeIdx]; if (!s) return;
+  const wrap = document.getElementById('sBullets');
+  wrap.innerHTML = '';
+  (s.bullets || []).forEach((b, i) => {
+    const row = document.createElement('div'); row.className = 'bullet-row';
+    const inp = document.createElement('input'); inp.value = b; inp.placeholder = 'bullet ' + (i+1);
+    inp.addEventListener('input', () => { s.bullets[i] = inp.value; renderPreview(); renderSlideList(); });
+    const rm = document.createElement('button'); rm.textContent = '×'; rm.title = 'remove';
+    rm.addEventListener('click', () => { s.bullets.splice(i, 1); renderBullets(); renderPreview(); });
+    row.appendChild(inp); row.appendChild(rm);
+    wrap.appendChild(row);
+  });
+}
+
+function addBullet() {
+  const s = deck.slides[activeIdx]; if (!s) return;
+  if ((s.bullets || []).length >= 5) { toast('5 bullets max'); return; }
+  s.bullets = s.bullets || []; s.bullets.push('');
+  renderBullets(); renderPreview();
+}
+
+// ═══════════════════════════════════════════════════════
+// PREVIEW renderer (also used for HTML export + print DOM)
+// ═══════════════════════════════════════════════════════
+function slideHTML(s, idx, total, opts) {
+  opts = opts || {};
+  const num = String(idx + 1).padStart(2, '0') + ' / ' + String(total).padStart(2,'0');
+  const corner = '◊';
+  const footerTag = opts.showFooter ? '◊ made with fallcarousel' : '';
+  if (s.type === 'cover') {
+    return `
+      <div class="corner-mark">${corner}</div>
+      <div class="eyebrow">${escapeHtml(s.eyebrow || '')}</div>
+      <div class="headline">${escapeHtml(s.headline || '')}</div>
+      <div style="flex:1"></div>
+      ${s.quote ? `<div class="quote">${escapeHtml(s.quote)}</div>` : ''}
+      <div class="slide-num">${num}</div>
+      ${footerTag ? `<div class="footer-tag">${footerTag}</div>` : ''}
+    `;
+  }
+  if (s.type === 'quote') {
+    return `
+      <div class="corner-mark">${corner}</div>
+      ${s.eyebrow ? `<div class="eyebrow">${escapeHtml(s.eyebrow)}</div>` : ''}
+      ${s.headline ? `<div class="headline">${escapeHtml(s.headline)}</div>` : ''}
+      <div style="flex:1"></div>
+      <div class="quote" style="font-size:1.4em;border-top:none;text-align:left">${escapeHtml(s.quote || '')}</div>
+      <div class="slide-num">${num}</div>
+      ${footerTag ? `<div class="footer-tag">${footerTag}</div>` : ''}
+    `;
+  }
+  if (s.type === 'cta') {
+    return `
+      <div class="corner-mark">${corner}</div>
+      ${s.eyebrow ? `<div class="eyebrow">${escapeHtml(s.eyebrow)}</div>` : ''}
+      <div class="headline">${escapeHtml(s.headline || '')}</div>
+      ${s.bullets && s.bullets.length ? `<ul class="body">${s.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('')}</ul>` : '<div style="flex:1"></div>'}
+      <div class="arrow-big">→</div>
+      <div class="slide-num">${num}</div>
+      ${footerTag ? `<div class="footer-tag">${footerTag}</div>` : ''}
+    `;
+  }
+  // standard
+  return `
+    <div class="corner-mark">${corner}</div>
+    ${s.eyebrow ? `<div class="eyebrow">${escapeHtml(s.eyebrow)}</div>` : ''}
+    ${s.headline ? `<div class="headline">${escapeHtml(s.headline)}</div>` : ''}
+    ${s.bullets && s.bullets.length ? `<ul class="body">${s.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('')}</ul>` : '<div style="flex:1"></div>'}
+    ${s.quote ? `<div class="quote">${escapeHtml(s.quote)}</div>` : ''}
+    <div class="slide-num">${num}</div>
+    ${footerTag ? `<div class="footer-tag">${footerTag}</div>` : ''}
+  `;
+}
+
+function applySlideColors(el, s) {
+  const c = deck.colors;
+  el.style.background = c.bg;
+  el.style.color = c.fg;
+  el.style.setProperty('--accent-fg', c.ac);
+  el.style.setProperty('--accent-bg', c.bg);
+  // accent eyebrow + bullets colored
+  const eyebrow = el.querySelector('.eyebrow'); if (eyebrow) eyebrow.style.color = c.ac;
+  const cornerMark = el.querySelector('.corner-mark'); if (cornerMark) cornerMark.style.color = c.ac;
+  el.querySelectorAll('ul.body li::before'); // hint
+  el.querySelectorAll('ul.body li').forEach(li => { li.style.color = c.fg; });
+}
+
+function renderPreview() {
+  const s = deck.slides[activeIdx]; if (!s) return;
+  const el = document.getElementById('previewSlide');
+  el.className = 'slide-frame ' + s.type;
+  el.innerHTML = slideHTML(s, activeIdx, deck.slides.length, { showFooter: Konomi.caps().footer });
+  applySlideColors(el, s);
+  document.getElementById('navInfo').textContent = `${String(activeIdx+1).padStart(2,'0')} / ${String(deck.slides.length).padStart(2,'0')}`;
+  document.getElementById('navPrev').disabled = activeIdx === 0;
+  document.getElementById('navNext').disabled = activeIdx >= deck.slides.length - 1;
+  renderStrip();
+  renderPostBody();
+}
+
+function renderStrip() {
+  const strip = document.getElementById('previewStrip');
+  strip.innerHTML = '';
+  deck.slides.forEach((s, i) => {
+    const t = document.createElement('div');
+    t.className = 'preview-thumb' + (i === activeIdx ? ' active' : '');
+    t.style.background = deck.colors.bg; t.style.color = deck.colors.fg;
+    t.innerHTML = `<span class="tn" style="color:${deck.colors.ac}">${String(i+1).padStart(2,'0')}</span><div class="ttitle">${escapeHtml((s.headline || '').slice(0, 40))}</div>`;
+    t.addEventListener('click', () => { activeIdx = i; renderAll(); });
+    strip.appendChild(t);
+  });
+}
+
+function renderPostBody() {
+  const lines = [];
+  const cover = deck.slides[0];
+  if (cover && cover.headline) lines.push(cover.headline);
+  lines.push('');
+  lines.push('A swipe-through ◊');
+  lines.push('');
+  if (deck.cta) lines.push(deck.cta);
+  document.getElementById('postBody').textContent = lines.join('\n');
+}
+
+function renderDrafts() {
+  const wrap = document.getElementById('draftList');
+  wrap.innerHTML = '';
+  if (!drafts.length) {
+    wrap.innerHTML = '<div style="font-family:DM Mono;font-size:11px;color:var(--muted);padding:6px 0">no drafts yet</div>';
+    return;
+  }
+  drafts.forEach(d => {
+    const row = document.createElement('div'); row.className = 'draft-row';
+    const dt = document.createElement('span'); dt.className = 'dt';
+    dt.textContent = (d.title || '(untitled)') + ' · ' + new Date(d.created || 0).toLocaleDateString();
+    dt.addEventListener('click', () => loadDraft(d.id));
+    const dx = document.createElement('button'); dx.className = 'dx'; dx.textContent = '×';
+    dx.addEventListener('click', () => deleteDraft(d.id));
+    row.appendChild(dt); row.appendChild(dx);
+    wrap.appendChild(row);
+  });
+}
+
+function renderLicBadge() {
+  const b = document.getElementById('licBadge');
+  if (Konomi.isPaid()) { b.classList.add('paid'); b.textContent = 'paid · 15 slides · unlimited'; }
+  else { b.classList.remove('paid'); b.textContent = 'free · 5 saved · 8 slides'; }
+}
+
+function renderAll() {
+  renderSlideList(); renderEditor(); renderPreview(); renderLicBadge();
+}
+
+// ═══════════════════════════════════════════════════════
+// SLIDE ops
+// ═══════════════════════════════════════════════════════
+function addSlide() {
+  if (deck.slides.length >= Konomi.caps().maxSlides) {
+    toast('slide cap reached · ' + (Konomi.isPaid() ? '15' : '8') + ' max');
+    return;
+  }
+  deck.slides.push(blankSlide('standard'));
+  activeIdx = deck.slides.length - 1;
+  renderAll();
+}
+function addCTA() {
+  if (deck.slides.length >= Konomi.caps().maxSlides) { toast('slide cap reached'); return; }
+  deck.slides.push({ type: 'cta', eyebrow: 'NEXT STEP', headline: 'Follow for more sovereign software lessons.', bullets: ['Drop a comment','I reply to all','◊'], quote: '' });
+  activeIdx = deck.slides.length - 1;
+  renderAll();
+}
+function duplicateSlide(i) {
+  if (deck.slides.length >= Konomi.caps().maxSlides) { toast('slide cap reached'); return; }
+  const copy = JSON.parse(JSON.stringify(deck.slides[i]));
+  deck.slides.splice(i + 1, 0, copy);
+  activeIdx = i + 1;
+  renderAll();
+}
+function deleteSlide(i) {
+  if (deck.slides.length <= 1) { toast('keep at least one slide'); return; }
+  deck.slides.splice(i, 1);
+  if (activeIdx >= deck.slides.length) activeIdx = deck.slides.length - 1;
+  renderAll();
+}
+function reorder(dir) {
+  const j = activeIdx + dir;
+  if (j < 0 || j >= deck.slides.length) return;
+  const tmp = deck.slides[activeIdx]; deck.slides[activeIdx] = deck.slides[j]; deck.slides[j] = tmp;
+  activeIdx = j;
+  renderAll();
+}
+function navSlide(dir) {
+  const j = activeIdx + dir;
+  if (j < 0 || j >= deck.slides.length) return;
+  activeIdx = j; renderAll();
+}
+
+// ═══════════════════════════════════════════════════════
+// EDITOR field bindings (no framework)
+// ═══════════════════════════════════════════════════════
+function bindEditor() {
+  const map = { sEyebrow: 'eyebrow', sHeadline: 'headline', sQuote: 'quote', sType: 'type' };
+  for (const id in map) {
+    document.getElementById(id).addEventListener('input', () => {
+      const s = deck.slides[activeIdx]; if (!s) return;
+      s[map[id]] = document.getElementById(id).value;
+      renderPreview(); renderSlideList();
+    });
+  }
+  document.getElementById('cTitle').addEventListener('input', () => {
+    deck.title = document.getElementById('cTitle').value;
+  });
+  ['cBg','cFg','cAc'].forEach((id, i) => {
+    const key = ['bg','fg','ac'][i];
+    document.getElementById(id).addEventListener('input', () => {
+      deck.colors[key] = document.getElementById(id).value;
+      renderPreview();
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// DRAFTS
+// ═══════════════════════════════════════════════════════
+async function saveDraft() {
+  const all = await DB.all();
+  if (all.length >= Konomi.caps().maxDrafts && !all.find(x => x.id === deck.id)) {
+    toast('draft cap (' + Konomi.caps().maxDrafts + ') · activate Konomi for unlimited');
+    return;
+  }
+  deck.saved = Date.now();
+  await DB.put(deck);
+  drafts = await DB.all();
+  renderDrafts();
+  toast('saved');
+  Mesh.emit('carousel_saved', { id: deck.id, title: deck.title, slides: deck.slides.length });
+}
+async function loadDraft(id) {
+  const all = await DB.all();
+  const d = all.find(x => x.id === id); if (!d) return;
+  deck = d; activeIdx = 0; renderAll();
+  document.getElementById('cTitle').value = deck.title || '';
+  toast('loaded');
+}
+async function deleteDraft(id) {
+  await DB.del(id);
+  drafts = await DB.all();
+  renderDrafts();
+  toast('deleted');
+}
+function newDeck() {
+  if (!confirm('Start a new deck? Unsaved changes will be lost.')) return;
+  deck = defaultDeck(); deck.id = 'd_' + Date.now().toString(36);
+  // clear slides to a single blank for true new
+  deck.slides = [{ type: 'cover', eyebrow: '', headline: 'New carousel', bullets: [], quote: '' }];
+  deck.title = '';
+  activeIdx = 0;
+  document.getElementById('cTitle').value = '';
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════════
+// EXPORTS
+// ═══════════════════════════════════════════════════════
+function exportPDF() {
+  // Build print DOM, call window.print()
+  const area = document.getElementById('printArea');
+  area.innerHTML = '';
+  area.style.display = 'block';
+  const caps = Konomi.caps();
+  deck.slides.forEach((s, i) => {
+    const sec = document.createElement('section');
+    sec.className = 'slide-print ' + s.type;
+    sec.style.background = deck.colors.bg;
+    sec.style.color = deck.colors.fg;
+    sec.innerHTML = slideHTML(s, i, deck.slides.length, { showFooter: caps.footer });
+    const eb = sec.querySelector('.eyebrow'); if (eb) eb.style.color = deck.colors.ac;
+    const cm = sec.querySelector('.corner-mark'); if (cm) cm.style.color = deck.colors.ac;
+    area.appendChild(sec);
+  });
+  Mesh.emit('carousel_exported', { format: 'pdf', slides: deck.slides.length });
+  setTimeout(() => {
+    window.print();
+    setTimeout(() => { area.style.display = 'none'; }, 600);
+  }, 80);
+}
+
+// Canvas-rendered PNG sequence. Each slide rendered at 1080×1350.
+function renderSlideToCanvas(s, idx, total) {
+  const W = 1080, H = 1350;
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d');
+  // background
+  x.fillStyle = deck.colors.bg; x.fillRect(0, 0, W, H);
+  // corner mark
+  x.fillStyle = deck.colors.ac;
+  x.font = 'bold 48px "Libre Baskerville", Georgia, serif';
+  x.textAlign = 'right'; x.textBaseline = 'top';
+  x.globalAlpha = 0.55; x.fillText('◊', W - 90, 80); x.globalAlpha = 1;
+  // eyebrow
+  let y = 130 + 50;
+  if (s.eyebrow) {
+    x.fillStyle = deck.colors.ac;
+    x.font = '500 18px "DM Mono", monospace';
+    x.textAlign = 'left'; x.textBaseline = 'top';
+    x.fillText((s.eyebrow + '').toUpperCase(), 90, y);
+    y += 56;
+  }
+  // headline
+  x.fillStyle = deck.colors.fg;
+  const headlineSize = s.type === 'cover' ? 76 : 56;
+  x.font = 'bold ' + headlineSize + 'px "Libre Baskerville", Georgia, serif';
+  x.textAlign = 'left'; x.textBaseline = 'top';
+  const head = (s.headline || '').trim();
+  y = wrapText(x, head, 90, y, W - 180, headlineSize * 1.12) + 36;
+  // bullets
+  if (s.bullets && s.bullets.length) {
+    x.font = '400 30px "DM Sans", sans-serif';
+    x.fillStyle = deck.colors.fg;
+    for (const b of s.bullets) {
+      // diamond
+      x.fillStyle = deck.colors.ac;
+      x.font = 'bold 30px "Libre Baskerville", Georgia, serif';
+      x.fillText('◊', 90, y);
+      // body
+      x.fillStyle = deck.colors.fg;
+      x.font = '400 30px "DM Sans", sans-serif';
+      y = wrapText(x, b, 130, y, W - 220, 42) + 22;
+      if (y > H - 220) break;
+    }
+  }
+  // CTA arrow
+  if (s.type === 'cta') {
+    x.fillStyle = deck.colors.ac;
+    x.globalAlpha = 0.45;
+    x.font = 'bold 220px "Libre Baskerville", Georgia, serif';
+    x.textAlign = 'right'; x.textBaseline = 'alphabetic';
+    x.fillText('→', W - 90, H - 200);
+    x.globalAlpha = 1;
+  }
+  // quote
+  if (s.quote) {
+    x.strokeStyle = deck.colors.fg; x.globalAlpha = 0.5;
+    x.beginPath(); x.moveTo(90, H - 240); x.lineTo(W - 90, H - 240); x.stroke(); x.globalAlpha = 1;
+    x.fillStyle = deck.colors.fg;
+    x.font = 'italic 400 28px "Libre Baskerville", Georgia, serif';
+    x.textAlign = 'left'; x.textBaseline = 'top';
+    wrapText(x, s.quote, 90, H - 220, W - 180, 38);
+  }
+  // slide num
+  x.fillStyle = deck.colors.fg; x.globalAlpha = 0.55;
+  x.font = '500 18px "DM Mono", monospace';
+  x.textAlign = 'right'; x.textBaseline = 'alphabetic';
+  x.fillText(String(idx+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0'), W - 90, H - 90);
+  // footer tag if free
+  if (Konomi.caps().footer) {
+    x.textAlign = 'left'; x.globalAlpha = 0.5;
+    x.font = '400 16px "DM Mono", monospace';
+    x.fillText('◊ MADE WITH FALLCAROUSEL', 90, H - 90);
+  }
+  x.globalAlpha = 1;
+  return c;
+}
+
+function wrapText(ctx, text, x, y, maxW, lineH) {
+  const words = (text || '').split(/\s+/);
+  let line = '';
+  for (const w of words) {
+    const test = line ? line + ' ' + w : w;
+    if (ctx.measureText(test).width > maxW && line) {
+      ctx.fillText(line, x, y);
+      line = w; y += lineH;
+    } else line = test;
+  }
+  if (line) { ctx.fillText(line, x, y); y += lineH; }
+  return y;
+}
+
+async function exportPNG() {
+  toast('rendering PNGs...');
+  for (let i = 0; i < deck.slides.length; i++) {
+    const c = renderSlideToCanvas(deck.slides[i], i, deck.slides.length);
+    await new Promise(res => c.toBlob(blob => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${slug(deck.title || 'carousel')}-${String(i+1).padStart(2,'0')}.png`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      res();
+    }, 'image/png'));
+    await new Promise(r => setTimeout(r, 120));
+  }
+  toast('PNGs exported · ' + deck.slides.length + ' files');
+  Mesh.emit('carousel_exported', { format: 'png', slides: deck.slides.length });
+}
+
+function exportHTML() {
+  const caps = Konomi.caps();
+  const css = `
+    body{background:#06050a;margin:0;font-family:'DM Sans',system-ui,sans-serif;color:#c4bfb2}
+    .deck{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding:24px}
+    .slide{flex:0 0 540px;height:675px;background:${deck.colors.bg};color:${deck.colors.fg};padding:48px;margin-right:14px;scroll-snap-align:center;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.6);position:relative;overflow:hidden}
+    .eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:${deck.colors.ac};margin-bottom:22px;opacity:0.85}
+    .headline{font-family:'Libre Baskerville',Georgia,serif;font-weight:700;font-size:30px;line-height:1.15;margin-bottom:18px}
+    .slide.cover .headline{font-size:38px}
+    ul.body{list-style:none;padding:0;margin:0;flex:1}
+    ul.body li{font-family:'DM Sans',sans-serif;font-size:18px;line-height:1.45;margin-bottom:10px;padding-left:22px;position:relative}
+    ul.body li::before{content:'◊';position:absolute;left:0;color:${deck.colors.ac};font-family:'Libre Baskerville',Georgia,serif}
+    .quote{font-family:'Libre Baskerville',Georgia,serif;font-style:italic;font-size:20px;line-height:1.4;margin-top:auto;padding:20px 0 0;border-top:1px solid currentColor;opacity:0.85}
+    .corner-mark{position:absolute;top:32px;right:36px;font-family:'Libre Baskerville',Georgia,serif;font-size:24px;font-weight:bold;color:${deck.colors.ac};opacity:0.55}
+    .slide-num{position:absolute;bottom:32px;right:36px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;opacity:0.55}
+    .footer-tag{position:absolute;bottom:32px;left:36px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;opacity:0.4;text-transform:uppercase}
+    .arrow-big{font-size:120px;font-family:'Libre Baskerville',Georgia,serif;line-height:1;margin-top:auto;opacity:0.4;color:${deck.colors.ac}}
+    .meta{padding:14px 28px;font-family:'DM Mono',monospace;font-size:11px;color:#6f6b78;letter-spacing:0.1em;text-transform:uppercase;border-top:1px solid #2a2730}
+    .meta a{color:#b8974a}
+  `;
+  const slidesHTML = deck.slides.map((s, i) => `<div class="slide ${s.type}">${slideHTML(s, i, deck.slides.length, { showFooter: caps.footer })}</div>`).join('');
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(deck.title)}</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;700&family=DM+Mono&display=swap" rel="stylesheet">
+<style>${css}</style></head><body>
+<div class="deck">${slidesHTML}</div>
+<div class="meta">${escapeHtml(deck.title || 'Carousel')} · swipe ◊ ${caps.footer ? 'made with <a href="https://sjgant80-hub.github.io/fallcarousel/">fallcarousel</a>' : ''}</div>
+</body></html>`;
+  download(html, `${slug(deck.title || 'carousel')}.html`, 'text/html');
+  Mesh.emit('carousel_exported', { format: 'html', slides: deck.slides.length });
+  toast('HTML deck exported');
+}
+
+function exportJSON() {
+  download(JSON.stringify(deck, null, 2), `${slug(deck.title || 'carousel')}.json`, 'application/json');
+  toast('JSON exported');
+}
+
+function loadJSON() {
+  const inp = document.getElementById('fileIn');
+  inp.value = '';
+  inp.onchange = () => {
+    const f = inp.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      try {
+        const d = JSON.parse(r.result);
+        if (!d.slides || !Array.isArray(d.slides)) throw new Error('not a carousel');
+        deck = d; if (!deck.id) deck.id = 'd_' + Date.now().toString(36);
+        activeIdx = 0;
+        document.getElementById('cTitle').value = deck.title || '';
+        renderAll();
+        toast('loaded');
+      } catch(e) { toast('invalid JSON'); }
+    };
+    r.readAsText(f);
+  };
+  inp.click();
+}
+
+function download(content, filename, mime) {
+  const blob = new Blob([content], { type: mime });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = filename; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function copyPost() {
+  const t = document.getElementById('postBody').textContent;
+  navigator.clipboard.writeText(t).then(() => toast('body copied'));
+}
+function copyComment() {
+  navigator.clipboard.writeText(deck.comment || '').then(() => toast('first comment copied'));
+}
+
+// ═══════════════════════════════════════════════════════
+// LICENCE MODAL
+// ═══════════════════════════════════════════════════════
+function openLicModal() { document.getElementById('licModal').classList.add('show'); }
+function closeLicModal() { document.getElementById('licModal').classList.remove('show'); }
+function activateLic() {
+  const k = document.getElementById('licKey').value.trim();
+  if (Konomi.activate(k)) { toast('paid tier activated'); closeLicModal(); renderAll(); }
+  else { toast('invalid key'); }
+}
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+function escapeHtml(s) { return String(s || '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+function slug(s) { return String(s || 'untitled').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50) || 'untitled'; }
+let toastT = null;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ═══════════════════════════════════════════════════════
+// HOOK PRESET BUTTONS
+// ═══════════════════════════════════════════════════════
+document.querySelectorAll('.hook-presets button').forEach(b => {
+  b.addEventListener('click', () => applyHook(b.dataset.hook));
+});
+
+// ═══════════════════════════════════════════════════════
+// THEME SWATCH BUTTONS
+// ═══════════════════════════════════════════════════════
+document.querySelectorAll('.theme-swatch').forEach(b => {
+  b.addEventListener('click', () => applyTheme(b.dataset.theme));
+});
+
+// keyboard nav
+document.addEventListener('keydown', (e) => {
+  if (document.activeElement && ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
+  if (e.key === 'ArrowLeft') navSlide(-1);
+  if (e.key === 'ArrowRight') navSlide(1);
+});
+
+// ═══════════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════════
+async function boot() {
+  deck = defaultDeck();
+  document.getElementById('cTitle').value = deck.title;
+  applyTheme('oxblood');
+  bindEditor();
+  drafts = await DB.all();
+  renderAll();
+  renderDrafts();
+  Mesh.emit('carousel_ready', { v: '1.0', prime: 367 });
+}
+boot();
+</script>
+</body>
+</html>
