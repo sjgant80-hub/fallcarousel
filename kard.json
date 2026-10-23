@@ -1,0 +1,29 @@
+{
+  "kind": "kard.v1",
+  "name": "fallcarousel",
+  "title": "fallcarousel",
+  "retires": "a social-carousel design tool",
+  "category": "Bookings, forms and marketing",
+  "license": "MIT",
+  "live": "https://sjgant80-hub.github.io/fallcarousel/",
+  "repo": "https://github.com/sjgant80-hub/fallcarousel",
+  "studs": {
+    "brain": {
+      "how": "inline",
+      "version": "3.1.0"
+    },
+    "mesh": {
+      "device": true,
+      "peer": false
+    },
+    "memory": {
+      "indexeddb": true,
+      "localstorage": true
+    },
+    "proof": {
+      "workflows": 0,
+      "tests": 0
+    }
+  },
+  "fits": false
+}
